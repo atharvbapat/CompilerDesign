@@ -1,0 +1,45 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+void yyerror(const char *s);
+extern int yylex();
+extern FILE *yyin;
+%}
+
+%token NOUN PRONOUN VERB ADVERB ADJECTIVE PREPOSITION CONJUNCTION
+
+%%
+
+sentences: 
+    | sentences sentence
+    ;
+
+
+sentence: subject VERB object '.' { printf("Sentence is valid.\n"); }
+    ;
+
+subject: NOUN
+        | PRONOUN
+        ;
+
+object: NOUN
+        ;
+
+%%
+
+int main() {
+    yyin = fopen("input.txt", "r");
+    if (!yyin) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    yyparse();
+    fclose(yyin);
+    return 0;
+}
+
+void yyerror(const char *s) {
+    fprintf(stderr, "Error: %s\n", s);
+}

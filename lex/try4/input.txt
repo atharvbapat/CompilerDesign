@@ -1,0 +1,6 @@
+noun dog
+verb runs
+adj big
+pron he
+
+he runs dog.
