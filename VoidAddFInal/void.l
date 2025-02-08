@@ -4,61 +4,69 @@
     #include <stdlib.h>
     #include <string.h>
 
-    typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
 
-    typedef struct Symbol {
 
+
+typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
+
+typedef struct Symbol {
         char name[50];
         void* value;
         DataType type;
         struct Symbol *next;
-
-    }Symbol;
-
-    Symbol* symbolTable = NULL;
+    } Symbol;
 
 
-    void insertSymbol(char* name,void* value,DataType type){
-        Symbol *newSymbol =(Symbol*)malloc(sizeof(Symbol));
-        newSymbol->name = strdup(name);
+Symbol* symbolTable = NULL;
 
-        switch(type){
-            case INT_TYPE:
-                newSymbol->value = malloc(sizeof(int));
-                *(int*)(newSymbol->value) = *(int*)value;
-                break;
-            case FLOAT_TYPE:
-                newSymbol->value = malloc(sizeof(float));
-                *(float*)(newSymbol->value) = *(float*)value;
-                break;
-            case CHAR_TYPE:
-                newSymbol->value = malloc(sizeof(char));
-                *(char*)(newSymbol->value) = *(char*)value;
-                break;
-            case STRING_TYPE:
-                newSymbol->value = malloc(strlen((char*)value) + 1); 
-                strcpy((char*)newSymbol->value, (char*)value);     
-                break;  
-        }
 
-        newSymbol->next = symbolTable;
-        symbolTable = newSymbol;
+
+
+
+void insertSymbol(char* name, void* value, DataType type) {
+    Symbol *newSymbol = (Symbol*)malloc(sizeof(Symbol));
+    strcpy(newSymbol->name, name);
+
+    switch(type) {
+        case INT_TYPE:
+            newSymbol->value = malloc(sizeof(int));
+            *(int*)(newSymbol->value) = *(int*)value;
+            break;
+        case FLOAT_TYPE:
+            newSymbol->value = malloc(sizeof(float));
+            *(float*)(newSymbol->value) = *(float*)value;
+            break;
+        case CHAR_TYPE:
+            newSymbol->value = malloc(sizeof(char));
+            *(char*)(newSymbol->value) = *(char*)value;
+            break;
+        case STRING_TYPE:
+            newSymbol->value = malloc(strlen((char*)value) + 1);
+            strcpy((char*)newSymbol->value, (char*)value);
+            break;
     }
 
+    newSymbol->type = type;
+    newSymbol->next = symbolTable;
+    symbolTable = newSymbol;
 
-    Symbol* getSymbol(char* name){
-        Symbol* current = symbolTable;
-        while(current){
-            if(strcmp(current->name,name) == 0){
-                return current;
-            }
-            current = current->next;
+}
+
+
+Symbol* getSymbol(char* name) {
+    Symbol* current = symbolTable;
+    while (current) {
+        if (strcmp(current->name, name) == 0) {
+            return current;
         }
-        return NULL;
+        current = current->next;
     }
+    return NULL;
+}
 
 
-    void printSymbol(char *name) {
+
+void printSymbol(char *name) {
     Symbol *symbol = getSymbol(name);
     if (!symbol) {
         printf("Variable %s not found!\n", name);
@@ -83,18 +91,15 @@
 }
 
 
-
-
 %}
 
 
 %option noyywrap
 
 
-
 %%
 
-[ \t]+      ;  
+[ \t]+                  ;  
 [0-9]+                  { int *n = malloc(sizeof(int)); *n = atoi(yytext); yylval.ptr = n; return INT_VALUE; }
 "print"                 { return PRINT; }
 [0-9]+\.[0-9]+          { float *f = malloc(sizeof(float)); *f = atof(yytext); yylval.ptr = f; return FLOAT_VALUE; }
@@ -104,7 +109,6 @@
 "="                     { return ASSIGN; }
 ";"                     { return SEMICOLON; }
 \n                      { return EOL; }
-.                       { return yytext[0]; }  // Return any other character as itself
-
+.                       { return yytext[0]; }
 
 %%
