@@ -458,7 +458,7 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "t.l"
 #line 2 "t.l"
-    #include "p.tab.h"
+    #include "parser.tab.h"
     #include <stdlib.h>
     #include <string.h>
 #line 465 "lex.yy.c"
@@ -679,7 +679,7 @@ YY_DECL
 		}
 
 	{
-#line 9 "t.l"
+#line 11 "t.l"
 
 
 #line 686 "lex.yy.c"
@@ -741,64 +741,64 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 11 "t.l"
+#line 13 "t.l"
 ;  
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 12 "t.l"
-{ printf("entering "); yylval.ival = atoi(yytext); return INT_VALUE; }
+#line 14 "t.l"
+{ yylval.ival = atoi(yytext); return INT_VALUE; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 13 "t.l"
+#line 15 "t.l"
 { return PRINT; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 14 "t.l"
-{ float *f = malloc(sizeof(float)); *f = atof(yytext); yylval.ptr = f; return FLOAT_VALUE; }
+#line 16 "t.l"
+{ yylval.fval = atof(yytext); return FLOAT_VALUE; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 15 "t.l"
-{ char *c = malloc(sizeof(char)); *c = yytext[1]; yylval.ptr = c; return CHAR_VALUE; }
+#line 17 "t.l"
+{ yylval.cval = yytext[1]; return CHAR_VALUE; }
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 16 "t.l"
-{ yylval.ptr = strdup(yytext + 1); ((char*)yylval.ptr)[strlen(yytext)-2] = '\0'; return STRING_VALUE; }
+#line 18 "t.l"
+{ yylval.sval = strdup(yytext + 1); yylval.sval[strlen(yylval.sval)-1] = '\0'; return STRING_VALUE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 17 "t.l"
+#line 19 "t.l"
 { yylval.ptr = strdup(yytext); return IDENTIFIER; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 18 "t.l"
+#line 20 "t.l"
 { return ASSIGN; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 19 "t.l"
+#line 21 "t.l"
 { return SEMICOLON; }
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 20 "t.l"
+#line 22 "t.l"
 { return EOL; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 21 "t.l"
+#line 23 "t.l"
 { return yytext[0]; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 23 "t.l"
+#line 25 "t.l"
 ECHO;
 	YY_BREAK
 #line 805 "lex.yy.c"
@@ -1806,6 +1806,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 23 "t.l"
+#line 25 "t.l"
 
 

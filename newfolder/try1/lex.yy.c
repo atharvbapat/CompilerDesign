@@ -747,7 +747,7 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 12 "t.l"
-{ printf("entering "); yylval.ival = atoi(yytext); return INT_VALUE; }
+{ int *n = malloc(sizeof(int)); *n = atoi(yytext); yylval.ptr = n; return INT_VALUE; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP

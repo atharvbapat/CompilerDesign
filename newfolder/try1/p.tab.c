@@ -81,15 +81,15 @@
     void yyerror(const char *s);
 
     // Define Data Types
-    //typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
+    typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
 
     // Define Symbol Structure
-    // typedef struct Symbol {
-    //     char name[50];
-    //     void* value;
-    //     DataType type;
-    //     struct Symbol *next;
-    // } Symbol;
+    typedef struct Symbol {
+        char name[50];
+        void* value;
+        DataType type;
+        struct Symbol *next;
+    } Symbol;
 
     // Global Symbol Table
     Symbol* symbolTable = NULL;
@@ -530,8 +530,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    53,    53,    54,    58,    78,    82,    95,   102,   109,
-     117
+       0,    51,    51,    52,    56,    66,    70,    77,    84,    91,
+      99
 };
 #endif
 
@@ -1097,119 +1097,103 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: program statement EOL  */
-#line 53 "p.y"
+#line 51 "p.y"
                           { }
 #line 1103 "p.tab.c"
     break;
 
   case 3: /* program: statement EOL  */
-#line 54 "p.y"
+#line 52 "p.y"
                     { }
 #line 1109 "p.tab.c"
     break;
 
   case 4: /* statement: IDENTIFIER ASSIGN expression SEMICOLON  */
-#line 58 "p.y"
+#line 56 "p.y"
                                            {
         Symbol *sym = getSymbol((yyvsp[-3].ptr));
         if (sym) {
             free(sym->value);
-            int *val=(int*)malloc(sizeof(int));
-            *val=*((int*)(yyvsp[-1].sym)->value);
-            sym->value = (void*)val;
-            free((yyvsp[-1].sym)->value);
-            free((yyvsp[-1].sym));
-            sym->type = INT_TYPE;
+            sym->value = (yyvsp[-1].ptr);
+            sym->type = *((DataType*)((yyvsp[-1].ptr) - sizeof(DataType)));
         } else {
-            printf("first");
-            int *val=(int*)malloc(sizeof(int));
-            *val=*((int*)(yyvsp[-1].sym)->value);
-            sym->value = (void*)val;
-            free((yyvsp[-1].sym)->value);
-            free((yyvsp[-1].sym));
-            insertSymbol((yyvsp[-3].ptr), (void*)val, INT_TYPE);
+            insertSymbol((yyvsp[-3].ptr), (yyvsp[-1].ptr), *((DataType*)((yyvsp[-1].ptr) - sizeof(DataType))));
         }
     }
-#line 1134 "p.tab.c"
+#line 1124 "p.tab.c"
     break;
 
   case 5: /* statement: PRINT IDENTIFIER SEMICOLON  */
-#line 78 "p.y"
+#line 66 "p.y"
                                  { printSymbol((yyvsp[-1].ptr)); }
-#line 1140 "p.tab.c"
+#line 1130 "p.tab.c"
     break;
 
   case 6: /* expression: INT_VALUE  */
-#line 82 "p.y"
+#line 70 "p.y"
               {
-        printf("in expre");
         void* val = malloc(sizeof(int) + sizeof(DataType));
         *((DataType*)val) = INT_TYPE;
         val += sizeof(DataType);
-
-        int *ptr=(int*)malloc(sizeof(int));
-        *ptr= (yyvsp[0].ival);
-        (yyval.sym) = (Symbol*)malloc(sizeof(Symbol));
-        // $$->name="hello";
-        (yyval.sym)->value=(void*)ptr;
-        (yyval.sym)->type=INT_TYPE;
+        *((int*)val) = *(int*)(yyvsp[0].ptr);
+        (yyval.ptr) = val;
     }
-#line 1158 "p.tab.c"
+#line 1142 "p.tab.c"
     break;
 
   case 7: /* expression: FLOAT_VALUE  */
-#line 95 "p.y"
+#line 77 "p.y"
                   {
         void* val = malloc(sizeof(float) + sizeof(DataType));
         *((DataType*)val) = FLOAT_TYPE;
         val += sizeof(DataType);
         *((float*)val) = *(float*)(yyvsp[0].ptr);
-        (yyval.sym) = val;
+        (yyval.ptr) = val;
     }
-#line 1170 "p.tab.c"
+#line 1154 "p.tab.c"
     break;
 
   case 8: /* expression: CHAR_VALUE  */
-#line 102 "p.y"
+#line 84 "p.y"
                  {
         void* val = malloc(sizeof(char) + sizeof(DataType));
         *((DataType*)val) = CHAR_TYPE;
         val += sizeof(DataType);
         *((char*)val) = *(char*)(yyvsp[0].ptr);
-        (yyval.sym) = val;
+        (yyval.ptr) = val;
     }
-#line 1182 "p.tab.c"
+#line 1166 "p.tab.c"
     break;
 
   case 9: /* expression: STRING_VALUE  */
-#line 109 "p.y"
+#line 91 "p.y"
                    {
         int len = strlen((char*)(yyvsp[0].ptr)) + 1;
         void* val = malloc(len + sizeof(DataType));
         *((DataType*)val) = STRING_TYPE;
         val += sizeof(DataType);
         strcpy((char*)val, (char*)(yyvsp[0].ptr));
-        (yyval.sym) = val;
+        (yyval.ptr) = val;
     }
-#line 1195 "p.tab.c"
+#line 1179 "p.tab.c"
     break;
 
   case 10: /* expression: IDENTIFIER  */
-#line 117 "p.y"
+#line 99 "p.y"
                  {
         Symbol *sym = getSymbol((yyvsp[0].ptr));
         if (sym) {
-            (yyval.sym) = sym->value;
+            (yyval.ptr) = sym->value;
         } else {
             yyerror("Undefined variable");
-            (yyval.sym) = NULL;
+            (yyval.ptr) = NULL;
         }
     }
-#line 1209 "p.tab.c"
+#line 1193 "p.tab.c"
     break;
 
 
-#line 1213 "p.tab.c"
+#line 1197 "p.tab.c"
 
       default: break;
     }
@@ -1402,7 +1386,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 128 "p.y"
+#line 110 "p.y"
 
 
 // Error Handler

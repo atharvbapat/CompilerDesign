@@ -37,14 +37,12 @@
     char cval;
     char *sval;
     void *ptr;
-    struct Symbol *sym;
 }
 
 %token PRINT ASSIGN SEMICOLON EOL
-%token <ival> INT_VALUE
-%token <ptr> FLOAT_VALUE CHAR_VALUE STRING_VALUE IDENTIFIER
+%token <ptr> INT_VALUE FLOAT_VALUE CHAR_VALUE STRING_VALUE IDENTIFIER
 
-%type <sym> expression
+%type <ptr> expression
 %type <ptr> statement
 
 %%
@@ -59,20 +57,10 @@ statement:
         Symbol *sym = getSymbol($1);
         if (sym) {
             free(sym->value);
-            int *val=(int*)malloc(sizeof(int));
-            *val=*((int*)$3->value);
-            sym->value = (void*)val;
-            free($3->value);
-            free($3);
-            sym->type = INT_TYPE;
+            sym->value = $3;
+            sym->type = *((DataType*)($3 - sizeof(DataType)));
         } else {
-            printf("first");
-            int *val=(int*)malloc(sizeof(int));
-            *val=*((int*)$3->value);
-            sym->value = (void*)val;
-            free($3->value);
-            free($3);
-            insertSymbol($1, (void*)val, INT_TYPE);
+            insertSymbol($1, $3, *((DataType*)($3 - sizeof(DataType))));
         }
     }
     | PRINT IDENTIFIER SEMICOLON { printSymbol($2); }
@@ -80,17 +68,11 @@ statement:
 
 expression:
     INT_VALUE {
-        printf("in expre");
         void* val = malloc(sizeof(int) + sizeof(DataType));
         *((DataType*)val) = INT_TYPE;
         val += sizeof(DataType);
-
-        int *ptr=(int*)malloc(sizeof(int));
-        *ptr= $1;
-        $$ = (Symbol*)malloc(sizeof(Symbol));
-        // $$->name="hello";
-        $$->value=(void*)ptr;
-        $$->type=INT_TYPE;
+        *((int*)val) = *(int*)$1;
+        $$ = val;
     }
     | FLOAT_VALUE {
         void* val = malloc(sizeof(float) + sizeof(DataType));

@@ -9,7 +9,7 @@
 %%
 
 [ \t]+                  ;  
-[0-9]+                  { printf("entering "); yylval.ival = atoi(yytext); return INT_VALUE; }
+[0-9]+                  { int *n = malloc(sizeof(int)); *n = atoi(yytext); yylval.ptr = n; return INT_VALUE; }
 "print"                 { return PRINT; }
 [0-9]+\.[0-9]+          { float *f = malloc(sizeof(float)); *f = atof(yytext); yylval.ptr = f; return FLOAT_VALUE; }
 '.'                     { char *c = malloc(sizeof(char)); *c = yytext[1]; yylval.ptr = c; return CHAR_VALUE; }

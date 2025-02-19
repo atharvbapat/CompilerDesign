@@ -69,16 +69,6 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
-typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
-
- typedef struct Symbol {
-        char name[50];
-        void* value;
-        DataType type;
-        struct Symbol *next;
-    } Symbol;
-
 union YYSTYPE
 {
 #line 34 "p.y"
@@ -88,9 +78,8 @@ union YYSTYPE
     char cval;
     char *sval;
     void *ptr;
-    struct Symbol *sym;
 
-#line 84 "p.tab.h"
+#line 83 "p.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

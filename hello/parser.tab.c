@@ -67,40 +67,17 @@
 
 
 /* First part of user prologue.  */
-#line 1 "p.y"
+#line 1 "parser.y"
 
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
-    #include "p.tab.h"
+    #include "symbol_table.h"
 
-    extern int yylex();
-    extern int yyparse();
-    extern FILE* yyin;
-
+    int yylex();
     void yyerror(const char *s);
 
-    // Define Data Types
-    //typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
-
-    // Define Symbol Structure
-    // typedef struct Symbol {
-    //     char name[50];
-    //     void* value;
-    //     DataType type;
-    //     struct Symbol *next;
-    // } Symbol;
-
-    // Global Symbol Table
-    Symbol* symbolTable = NULL;
-
-    // Function Prototypes
-    void insertSymbol(char* name, void* value, DataType type);
-    Symbol* getSymbol(char* name);
-    void printSymbol(char *name);
-
-
-#line 104 "p.tab.c"
+#line 81 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -123,7 +100,7 @@
 #  endif
 # endif
 
-#include "p.tab.h"
+#include "parser.tab.h"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -469,9 +446,9 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  7
+#define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   18
+#define YYLAST   12
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  12
@@ -480,7 +457,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  10
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  19
+#define YYNSTATES  17
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   266
@@ -530,8 +507,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    53,    53,    54,    58,    78,    82,    95,   102,   109,
-     117
+       0,    31,    31,    32,    36,    40,    46,    51,    56,    61,
+      65
 };
 #endif
 
@@ -560,7 +537,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-10)
+#define YYPACT_NINF (-11)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -574,8 +551,8 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -2,    -9,     6,     0,     7,     9,    -3,   -10,    10,   -10,
-     -10,   -10,   -10,   -10,   -10,   -10,    12,   -10,   -10
+     -11,     0,   -11,   -10,    -2,     3,     5,    -3,   -11,   -11,
+     -11,   -11,   -11,   -11,   -11,     7,   -11
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -583,20 +560,20 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     0,     0,     0,     0,     1,     0,     3,
-       5,     6,     7,     8,     9,    10,     0,     2,     4
+       3,     0,     1,     0,     0,     0,     0,     0,     2,     5,
+       6,     7,     8,     9,    10,     0,     4
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -10,   -10,    15,   -10
+     -11,   -11,   -11,   -11
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     3,     4,    16
+       0,     1,     5,    15
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -604,22 +581,22 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       7,     1,     5,     1,    11,    12,    13,    14,    15,     2,
-       6,     2,     0,     9,    10,     0,    17,    18,     8
+       2,     6,     7,     3,    10,    11,    12,    13,    14,     8,
+       9,     4,    16
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     3,    11,     3,     7,     8,     9,    10,    11,    11,
-       4,    11,    -1,     6,     5,    -1,     6,     5,     3
+       0,    11,     4,     3,     7,     8,     9,    10,    11,     6,
+       5,    11,     5
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,    11,    13,    14,    11,     4,     0,    14,     6,
-       5,     7,     8,     9,    10,    11,    15,     6,     5
+       0,    13,     0,     3,    11,    14,    11,     4,     6,     5,
+       7,     8,     9,    10,    11,    15,     5
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
@@ -632,7 +609,7 @@ static const yytype_int8 yyr1[] =
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     3,     2,     4,     3,     1,     1,     1,     1,
+       0,     2,     3,     0,     4,     3,     1,     1,     1,     1,
        1
 };
 
@@ -1096,120 +1073,72 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2: /* program: program statement EOL  */
-#line 53 "p.y"
-                          { }
-#line 1103 "p.tab.c"
-    break;
-
-  case 3: /* program: statement EOL  */
-#line 54 "p.y"
-                    { }
-#line 1109 "p.tab.c"
-    break;
-
   case 4: /* statement: IDENTIFIER ASSIGN expression SEMICOLON  */
-#line 58 "p.y"
+#line 36 "parser.y"
                                            {
-        Symbol *sym = getSymbol((yyvsp[-3].ptr));
-        if (sym) {
-            free(sym->value);
-            int *val=(int*)malloc(sizeof(int));
-            *val=*((int*)(yyvsp[-1].sym)->value);
-            sym->value = (void*)val;
-            free((yyvsp[-1].sym)->value);
-            free((yyvsp[-1].sym));
-            sym->type = INT_TYPE;
-        } else {
-            printf("first");
-            int *val=(int*)malloc(sizeof(int));
-            *val=*((int*)(yyvsp[-1].sym)->value);
-            sym->value = (void*)val;
-            free((yyvsp[-1].sym)->value);
-            free((yyvsp[-1].sym));
-            insertSymbol((yyvsp[-3].ptr), (void*)val, INT_TYPE);
-        }
+        DataType type = *((DataType*)(yyvsp[-1].ptr));
+        insertSymbol((char*)(yyvsp[-3].ptr), (void*)((yyvsp[-1].ptr) + sizeof(DataType)), type);
     }
-#line 1134 "p.tab.c"
+#line 1083 "parser.tab.c"
     break;
 
   case 5: /* statement: PRINT IDENTIFIER SEMICOLON  */
-#line 78 "p.y"
-                                 { printSymbol((yyvsp[-1].ptr)); }
-#line 1140 "p.tab.c"
+#line 40 "parser.y"
+                                 {
+        printSymbol((char*)(yyvsp[-1].ptr));
+    }
+#line 1091 "parser.tab.c"
     break;
 
   case 6: /* expression: INT_VALUE  */
-#line 82 "p.y"
+#line 46 "parser.y"
               {
-        printf("in expre");
-        void* val = malloc(sizeof(int) + sizeof(DataType));
-        *((DataType*)val) = INT_TYPE;
-        val += sizeof(DataType);
-
-        int *ptr=(int*)malloc(sizeof(int));
-        *ptr= (yyvsp[0].ival);
-        (yyval.sym) = (Symbol*)malloc(sizeof(Symbol));
-        // $$->name="hello";
-        (yyval.sym)->value=(void*)ptr;
-        (yyval.sym)->type=INT_TYPE;
+        int* val = malloc(sizeof(int));
+        *val = (yyvsp[0].ival);
+        (yyval.ptr) = createData(val, INT_TYPE);
     }
-#line 1158 "p.tab.c"
+#line 1101 "parser.tab.c"
     break;
 
   case 7: /* expression: FLOAT_VALUE  */
-#line 95 "p.y"
+#line 51 "parser.y"
                   {
-        void* val = malloc(sizeof(float) + sizeof(DataType));
-        *((DataType*)val) = FLOAT_TYPE;
-        val += sizeof(DataType);
-        *((float*)val) = *(float*)(yyvsp[0].ptr);
-        (yyval.sym) = val;
+        float* val = malloc(sizeof(float));
+        *val = (yyvsp[0].fval);
+        (yyval.ptr) = createData(val, FLOAT_TYPE);
     }
-#line 1170 "p.tab.c"
+#line 1111 "parser.tab.c"
     break;
 
   case 8: /* expression: CHAR_VALUE  */
-#line 102 "p.y"
+#line 56 "parser.y"
                  {
-        void* val = malloc(sizeof(char) + sizeof(DataType));
-        *((DataType*)val) = CHAR_TYPE;
-        val += sizeof(DataType);
-        *((char*)val) = *(char*)(yyvsp[0].ptr);
-        (yyval.sym) = val;
+        char* val = malloc(sizeof(char));
+        *val = (yyvsp[0].cval);
+        (yyval.ptr) = createData(val, CHAR_TYPE);
     }
-#line 1182 "p.tab.c"
+#line 1121 "parser.tab.c"
     break;
 
   case 9: /* expression: STRING_VALUE  */
-#line 109 "p.y"
+#line 61 "parser.y"
                    {
-        int len = strlen((char*)(yyvsp[0].ptr)) + 1;
-        void* val = malloc(len + sizeof(DataType));
-        *((DataType*)val) = STRING_TYPE;
-        val += sizeof(DataType);
-        strcpy((char*)val, (char*)(yyvsp[0].ptr));
-        (yyval.sym) = val;
+        char* val = strdup((yyvsp[0].sval));
+        (yyval.ptr) = createData(val, STRING_TYPE);
     }
-#line 1195 "p.tab.c"
+#line 1130 "parser.tab.c"
     break;
 
   case 10: /* expression: IDENTIFIER  */
-#line 117 "p.y"
+#line 65 "parser.y"
                  {
-        Symbol *sym = getSymbol((yyvsp[0].ptr));
-        if (sym) {
-            (yyval.sym) = sym->value;
-        } else {
-            yyerror("Undefined variable");
-            (yyval.sym) = NULL;
-        }
+        (yyval.ptr) = getSymbolValue((char*)(yyvsp[0].ptr));
     }
-#line 1209 "p.tab.c"
+#line 1138 "parser.tab.c"
     break;
 
 
-#line 1213 "p.tab.c"
+#line 1142 "parser.tab.c"
 
       default: break;
     }
@@ -1402,82 +1331,15 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 128 "p.y"
+#line 70 "parser.y"
 
 
-// Error Handler
 void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
 }
 
-// Function to Insert Symbol in Table
-void insertSymbol(char* name, void* value, DataType type) {
-    Symbol *newSymbol = (Symbol*)malloc(sizeof(Symbol));
-    strcpy(newSymbol->name, name);
-
-    switch(type) {
-        case INT_TYPE:
-            newSymbol->value = malloc(sizeof(int));
-            *(int*)(newSymbol->value) = *(int*)value;
-            break;
-        case FLOAT_TYPE:
-            newSymbol->value = malloc(sizeof(float));
-            *(float*)(newSymbol->value) = *(float*)value;
-            break;
-        case CHAR_TYPE:
-            newSymbol->value = malloc(sizeof(char));
-            *(char*)(newSymbol->value) = *(char*)value;
-            break;
-        case STRING_TYPE:
-            newSymbol->value = malloc(strlen((char*)value) + 1);
-            strcpy((char*)newSymbol->value, (char*)value);
-            break;
-    }
-
-    newSymbol->type = type;
-    newSymbol->next = symbolTable;
-    symbolTable = newSymbol;
-}
-
-// Function to Retrieve Symbol from Table
-Symbol* getSymbol(char* name) {
-    Symbol* current = symbolTable;
-    while (current) {
-        if (strcmp(current->name, name) == 0) {
-            return current;
-        }
-        current = current->next;
-    }
-    return NULL;
-}
-
-// Function to Print Symbol Value
-void printSymbol(char *name) {
-    Symbol *symbol = getSymbol(name);
-    if (!symbol) {
-        printf("Variable %s not found!\n", name);
-        return;
-    }
-
-    printf("Variable %s = ", name);
-    switch (symbol->type) {
-        case INT_TYPE:
-            printf("%d (int)\n", *(int *)(symbol->value));
-            break;
-        case FLOAT_TYPE:
-            printf("%f (float)\n", *(float *)(symbol->value));
-            break;
-        case CHAR_TYPE:
-            printf("'%c' (char)\n", *(char *)(symbol->value));
-            break;
-        case STRING_TYPE:
-            printf("\"%s\" (string)\n", (char *)(symbol->value));
-            break;
-    }
-}
-
-// Main Function
 int main() {
+    printf("Simple Interpreter. Type statements and press Enter.\n");
     yyparse();
     return 0;
 }

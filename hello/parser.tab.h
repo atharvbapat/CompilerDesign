@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_P_TAB_H_INCLUDED
-# define YY_YY_P_TAB_H_INCLUDED
+#ifndef YY_YY_PARSER_TAB_H_INCLUDED
+# define YY_YY_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -69,28 +69,17 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
-typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
-
- typedef struct Symbol {
-        char name[50];
-        void* value;
-        DataType type;
-        struct Symbol *next;
-    } Symbol;
-
 union YYSTYPE
 {
-#line 34 "p.y"
+#line 11 "parser.y"
 
     int ival;
     float fval;
     char cval;
     char *sval;
     void *ptr;
-    struct Symbol *sym;
 
-#line 84 "p.tab.h"
+#line 83 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -105,4 +94,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_P_TAB_H_INCLUDED  */
+#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */
