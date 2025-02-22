@@ -13,15 +13,6 @@ void* createData(void* value, DataType type) {
 }
 
 void insertSymbol(char* name, Data* data) {
-
-    // Symbol* current = symbolTable;
-    // while(current){
-    //     if(strcmp(current->name,name) == 0){
-    //         current->data = data;
-    //         return;
-    //     }
-    //     current = current->next;
-    // }
     Symbol* sym = malloc(sizeof(Symbol));
     strcpy(sym->name, name);
     sym->data = data;
@@ -53,7 +44,6 @@ void printSymbol(char* name) {
         case STRING_TYPE: printf("\"%s\"\n", (char*)data->value); break;
     }
 }
-
 
 void printSymbolTable() {
     printf("\n--- Symbol Table ---\n");

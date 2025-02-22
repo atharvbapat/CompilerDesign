@@ -9,6 +9,10 @@
 %%
 
 [ \t]+                  ;  
+"+" { return '+'; }
+"-" { return '-'; }
+"*" { return '*'; }
+"/" { return '/'; }
 \n                      { return EOL; }  
 "print"                 { return PRINT; }
 [0-9]+\.[0-9]+          { yylval.fval = atof(yytext); return FLOAT_VALUE; }  
@@ -20,4 +24,4 @@
 ";"                     { return SEMICOLON; }
 .                       { printf("Unknown token: %s\n", yytext); return yytext[0]; }  
 
-%% 
+%%

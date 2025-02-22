@@ -9,19 +9,11 @@ void* createData(void* value, DataType type) {
     Data* data = malloc(sizeof(Data));
     data->type = type;
     data->value = value;
+    data->ref_count = 1;
     return data;
 }
 
 void insertSymbol(char* name, Data* data) {
-
-    // Symbol* current = symbolTable;
-    // while(current){
-    //     if(strcmp(current->name,name) == 0){
-    //         current->data = data;
-    //         return;
-    //     }
-    //     current = current->next;
-    // }
     Symbol* sym = malloc(sizeof(Symbol));
     strcpy(sym->name, name);
     sym->data = data;
@@ -51,6 +43,12 @@ void printSymbol(char* name) {
         case FLOAT_TYPE: printf("%f\n", *(float*)data->value); break;
         case CHAR_TYPE: printf("'%c'\n", *(char*)data->value); break;
         case STRING_TYPE: printf("\"%s\"\n", (char*)data->value); break;
+    }
+}
+
+void addRef(Data* data){
+    if(data){
+        data->ref_count++;
     }
 }
 
