@@ -76,8 +76,9 @@
 
     extern int yylex();
     void yyerror(const char *s);
+    int attribute_count = 0;
 
-#line 81 "parser.tab.c"
+#line 82 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -111,22 +112,31 @@ enum yysymbol_kind_t
   YYSYMBOL_PRINT = 3,                      /* PRINT  */
   YYSYMBOL_ASSIGN = 4,                     /* ASSIGN  */
   YYSYMBOL_SEMICOLON = 5,                  /* SEMICOLON  */
-  YYSYMBOL_EOL = 6,                        /* EOL  */
-  YYSYMBOL_INT_VALUE = 7,                  /* INT_VALUE  */
-  YYSYMBOL_FLOAT_VALUE = 8,                /* FLOAT_VALUE  */
-  YYSYMBOL_CHAR_VALUE = 9,                 /* CHAR_VALUE  */
-  YYSYMBOL_STRING_VALUE = 10,              /* STRING_VALUE  */
-  YYSYMBOL_IDENTIFIER = 11,                /* IDENTIFIER  */
-  YYSYMBOL_DELETE = 12,                    /* DELETE  */
-  YYSYMBOL_13_ = 13,                       /* '+'  */
-  YYSYMBOL_14_ = 14,                       /* '-'  */
-  YYSYMBOL_15_ = 15,                       /* '*'  */
-  YYSYMBOL_16_ = 16,                       /* '/'  */
-  YYSYMBOL_17_del_ = 17,                   /* "del"  */
-  YYSYMBOL_YYACCEPT = 18,                  /* $accept  */
-  YYSYMBOL_program = 19,                   /* program  */
-  YYSYMBOL_statement = 20,                 /* statement  */
-  YYSYMBOL_expression = 21                 /* expression  */
+  YYSYMBOL_COLON = 6,                      /* COLON  */
+  YYSYMBOL_COMMA = 7,                      /* COMMA  */
+  YYSYMBOL_EOL = 8,                        /* EOL  */
+  YYSYMBOL_CLASS = 9,                      /* CLASS  */
+  YYSYMBOL_INT_VALUE = 10,                 /* INT_VALUE  */
+  YYSYMBOL_FLOAT_VALUE = 11,               /* FLOAT_VALUE  */
+  YYSYMBOL_CHAR_VALUE = 12,                /* CHAR_VALUE  */
+  YYSYMBOL_STRING_VALUE = 13,              /* STRING_VALUE  */
+  YYSYMBOL_IDENTIFIER = 14,                /* IDENTIFIER  */
+  YYSYMBOL_DELETE = 15,                    /* DELETE  */
+  YYSYMBOL_16_ = 16,                       /* '+'  */
+  YYSYMBOL_17_ = 17,                       /* '-'  */
+  YYSYMBOL_18_ = 18,                       /* '*'  */
+  YYSYMBOL_19_ = 19,                       /* '/'  */
+  YYSYMBOL_20_ = 20,                       /* '^'  */
+  YYSYMBOL_21_ = 21,                       /* '('  */
+  YYSYMBOL_22_ = 22,                       /* ')'  */
+  YYSYMBOL_23_ = 23,                       /* '.'  */
+  YYSYMBOL_YYACCEPT = 24,                  /* $accept  */
+  YYSYMBOL_program = 25,                   /* program  */
+  YYSYMBOL_statement = 26,                 /* statement  */
+  YYSYMBOL_class_definition = 27,          /* class_definition  */
+  YYSYMBOL_attribute_list = 28,            /* attribute_list  */
+  YYSYMBOL_object_instantiation = 29,      /* object_instantiation  */
+  YYSYMBOL_expression = 30                 /* expression  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -452,21 +462,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  10
+#define YYFINAL  15
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   31
+#define YYLAST   45
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  18
+#define YYNTOKENS  24
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  7
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  16
+#define YYNRULES  21
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  31
+#define YYNSTATES  43
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   268
+#define YYMAXUTOK   270
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -484,12 +494,12 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,    15,    13,     2,    14,     2,    16,     2,     2,
+      21,    22,    18,    16,     2,    17,    23,    19,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,    20,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -506,15 +516,17 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    17
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int8 yyrline[] =
 {
-       0,    32,    32,    33,    37,    40,    43,    46,    52,    61,
-      70,    79,    83,    86,   110,   136,   160
+       0,    36,    36,    37,    41,    42,    43,    46,    49,    52,
+      55,    58,    62,    68,    72,    79,    85,    90,    95,   100,
+     104,   107
 };
 #endif
 
@@ -531,9 +543,11 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "PRINT", "ASSIGN",
-  "SEMICOLON", "EOL", "INT_VALUE", "FLOAT_VALUE", "CHAR_VALUE",
-  "STRING_VALUE", "IDENTIFIER", "DELETE", "'+'", "'-'", "'*'", "'/'",
-  "\"del\"", "$accept", "program", "statement", "expression", YY_NULLPTR
+  "SEMICOLON", "COLON", "COMMA", "EOL", "CLASS", "INT_VALUE",
+  "FLOAT_VALUE", "CHAR_VALUE", "STRING_VALUE", "IDENTIFIER", "DELETE",
+  "'+'", "'-'", "'*'", "'/'", "'^'", "'('", "')'", "'.'", "$accept",
+  "program", "statement", "class_definition", "attribute_list",
+  "object_instantiation", "expression", YY_NULLPTR
 };
 
 static const char *
@@ -543,7 +557,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-20)
+#define YYPACT_NINF (-17)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -557,10 +571,11 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -2,    -3,     8,     2,     0,    10,   -20,     9,    15,    24,
-     -20,    25,   -20,   -20,   -20,   -20,   -20,   -20,   -20,     5,
-     -20,   -20,   -20,    15,    15,    15,    15,    12,    12,   -20,
-     -20
+      -1,     5,   -13,    -4,   -10,     3,     1,   -17,   -17,   -17,
+       6,     9,    10,    16,    26,   -17,    24,   -17,   -17,    19,
+     -17,   -17,   -17,   -17,   -16,    29,    31,   -17,   -17,   -17,
+      30,    14,    25,   -17,    15,    27,    33,   -17,    17,    37,
+     -17,   -17,   -17
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -568,22 +583,23 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     0,     0,     0,     6,     0,     0,     0,
-       1,     0,     3,     5,     8,     9,    10,    11,    12,     0,
-       7,     2,     4,     0,     0,     0,     0,    13,    14,    15,
-      16
+      11,     0,     0,     0,     0,    11,     0,     4,     5,     9,
+       0,     0,     0,     0,     0,     1,     0,     3,     8,     0,
+      16,    17,    18,    19,    20,     0,     0,    10,     2,    13,
+      12,     0,     0,     6,     0,     0,     0,    21,    20,     0,
+      14,    15,     7
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -20,   -20,    26,   -19
+     -17,   -17,    38,   -17,   -17,   -17,    11
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     4,     5,    19
+       0,     5,     6,     7,    30,     8,    25
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -591,42 +607,47 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      10,     1,     6,     1,    27,    28,    29,    30,     7,     2,
-      22,     2,     8,     9,    13,     3,    12,     3,    23,    24,
-      25,    26,    14,    15,    16,    17,    18,    25,    26,    20,
-      11,    21
+      12,    11,     1,    15,    14,    31,     1,    32,     2,    17,
+       9,    18,     2,     3,     4,    19,    13,     3,     4,    10,
+      20,    21,    22,    23,    24,    20,    21,    22,    23,    38,
+      26,    27,    28,    29,    33,    34,    36,    35,    41,    37,
+      32,    40,    42,    16,     0,    39
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     3,     5,     3,    23,    24,    25,    26,    11,    11,
-       5,    11,     4,    11,     5,    17,     6,    17,    13,    14,
-      15,    16,     7,     8,     9,    10,    11,    15,    16,     5,
-       4,     6
+       4,    14,     3,     0,    14,    21,     3,    23,     9,     8,
+       5,     5,     9,    14,    15,     6,    20,    14,    15,    14,
+      10,    11,    12,    13,    14,    10,    11,    12,    13,    14,
+      14,     5,     8,    14,     5,     4,    22,     7,     5,    14,
+      23,    14,     5,     5,    -1,    34
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,    11,    17,    19,    20,     5,    11,     4,    11,
-       0,    20,     6,     5,     7,     8,     9,    10,    11,    21,
-       5,     6,     5,    13,    14,    15,    16,    21,    21,    21,
-      21
+       0,     3,     9,    14,    15,    25,    26,    27,    29,     5,
+      14,    14,     4,    20,    14,     0,    26,     8,     5,     6,
+      10,    11,    12,    13,    14,    30,    14,     5,     8,    14,
+      28,    21,    23,     5,     4,     7,    22,    14,    14,    30,
+      14,     5,     5
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    18,    19,    19,    20,    20,    20,    20,    21,    21,
-      21,    21,    21,    21,    21,    21,    21
+       0,    24,    25,    25,    26,    26,    26,    26,    26,    26,
+      26,    26,    27,    28,    28,    29,    30,    30,    30,    30,
+      30,    30
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     3,     2,     4,     3,     2,     3,     1,     1,
-       1,     1,     1,     3,     3,     3,     3
+       0,     2,     3,     2,     1,     1,     4,     6,     3,     2,
+       3,     0,     4,     1,     3,     6,     1,     1,     1,     1,
+       1,     3
 };
 
 
@@ -1090,234 +1111,148 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: program statement EOL  */
-#line 32 "parser.y"
+#line 36 "parser.y"
                           { }
-#line 1096 "parser.tab.c"
+#line 1117 "parser.tab.c"
     break;
 
   case 3: /* program: statement EOL  */
-#line 33 "parser.y"
-                    { }
-#line 1102 "parser.tab.c"
-    break;
-
-  case 4: /* statement: IDENTIFIER ASSIGN expression SEMICOLON  */
 #line 37 "parser.y"
-                                           {
-        insertSymbol((yyvsp[-3].sval), (yyvsp[-1].ptr));  
-    }
-#line 1110 "parser.tab.c"
+                    { }
+#line 1123 "parser.tab.c"
     break;
 
-  case 5: /* statement: PRINT IDENTIFIER SEMICOLON  */
-#line 40 "parser.y"
+  case 6: /* statement: IDENTIFIER ASSIGN expression SEMICOLON  */
+#line 43 "parser.y"
+                                             {
+        insertSymbol((yyvsp[-3].sval), (yyvsp[-1].ptr));
+    }
+#line 1131 "parser.tab.c"
+    break;
+
+  case 7: /* statement: IDENTIFIER '^' IDENTIFIER ASSIGN expression SEMICOLON  */
+#line 46 "parser.y"
+                                                            {
+        setObjectAttribute((yyvsp[-5].sval), (yyvsp[-3].sval), (yyvsp[-1].ptr));
+    }
+#line 1139 "parser.tab.c"
+    break;
+
+  case 8: /* statement: PRINT IDENTIFIER SEMICOLON  */
+#line 49 "parser.y"
                                  {
         printSymbol((yyvsp[-1].sval));
     }
-#line 1118 "parser.tab.c"
+#line 1147 "parser.tab.c"
     break;
 
-  case 6: /* statement: PRINT SEMICOLON  */
-#line 43 "parser.y"
-                     {
+  case 9: /* statement: PRINT SEMICOLON  */
+#line 52 "parser.y"
+                      {
         printSymbolTable();
     }
-#line 1126 "parser.tab.c"
+#line 1155 "parser.tab.c"
     break;
 
-  case 7: /* statement: "del" IDENTIFIER SEMICOLON  */
-#line 46 "parser.y"
-                                {
+  case 10: /* statement: DELETE IDENTIFIER SEMICOLON  */
+#line 55 "parser.y"
+                                  {
         deleteSymbol((yyvsp[-1].sval));
     }
-#line 1134 "parser.tab.c"
+#line 1163 "parser.tab.c"
     break;
 
-  case 8: /* expression: INT_VALUE  */
-#line 52 "parser.y"
+  case 12: /* class_definition: CLASS IDENTIFIER COLON attribute_list  */
+#line 62 "parser.y"
+                                          {
+        createClass((yyvsp[-2].sval), (yyvsp[0].dt));
+    }
+#line 1171 "parser.tab.c"
+    break;
+
+  case 13: /* attribute_list: IDENTIFIER  */
+#line 68 "parser.y"
+               {
+        (yyval.dt) = createAttributeList((yyvsp[0].sval));
+        attribute_count = 1;
+    }
+#line 1180 "parser.tab.c"
+    break;
+
+  case 14: /* attribute_list: attribute_list COMMA IDENTIFIER  */
+#line 72 "parser.y"
+                                      {
+        (yyval.dt) = addAttribute((yyvsp[-2].dt), attribute_count, (yyvsp[0].sval));
+        attribute_count++;
+    }
+#line 1189 "parser.tab.c"
+    break;
+
+  case 15: /* object_instantiation: IDENTIFIER ASSIGN IDENTIFIER '(' ')' SEMICOLON  */
+#line 79 "parser.y"
+                                                   {
+        createObject((yyvsp[-3].sval), (yyvsp[-5].sval));
+    }
+#line 1197 "parser.tab.c"
+    break;
+
+  case 16: /* expression: INT_VALUE  */
+#line 85 "parser.y"
               {
         int* val = malloc(sizeof(int));
-        if (!val) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(1);
-        }
         *val = (yyvsp[0].ival);
         (yyval.ptr) = createData(val, INT_TYPE);
     }
-#line 1148 "parser.tab.c"
+#line 1207 "parser.tab.c"
     break;
 
-  case 9: /* expression: FLOAT_VALUE  */
-#line 61 "parser.y"
+  case 17: /* expression: FLOAT_VALUE  */
+#line 90 "parser.y"
                   {
         float* val = malloc(sizeof(float));
-        if (!val) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(1);
-        }
         *val = (yyvsp[0].fval);
         (yyval.ptr) = createData(val, FLOAT_TYPE);
     }
-#line 1162 "parser.tab.c"
+#line 1217 "parser.tab.c"
     break;
 
-  case 10: /* expression: CHAR_VALUE  */
-#line 70 "parser.y"
+  case 18: /* expression: CHAR_VALUE  */
+#line 95 "parser.y"
                  {
         char* val = malloc(sizeof(char));
-        if (!val) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(1);
-        }
         *val = (yyvsp[0].cval);
         (yyval.ptr) = createData(val, CHAR_TYPE);
     }
-#line 1176 "parser.tab.c"
+#line 1227 "parser.tab.c"
     break;
 
-  case 11: /* expression: STRING_VALUE  */
-#line 79 "parser.y"
+  case 19: /* expression: STRING_VALUE  */
+#line 100 "parser.y"
                    {
         char* val = strdup((yyvsp[0].sval));
         (yyval.ptr) = createData(val, STRING_TYPE);
     }
-#line 1185 "parser.tab.c"
+#line 1236 "parser.tab.c"
     break;
 
-  case 12: /* expression: IDENTIFIER  */
-#line 83 "parser.y"
+  case 20: /* expression: IDENTIFIER  */
+#line 104 "parser.y"
                  {
         (yyval.ptr) = getSymbolValue((yyvsp[0].sval));
     }
-#line 1193 "parser.tab.c"
+#line 1244 "parser.tab.c"
     break;
 
-  case 13: /* expression: expression '+' expression  */
-#line 86 "parser.y"
+  case 21: /* expression: IDENTIFIER '.' IDENTIFIER  */
+#line 107 "parser.y"
                                 {
-        Data* data1 = (Data*)(yyvsp[-2].ptr);
-        Data* data2 = (Data*)(yyvsp[0].ptr);
-
-        if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
-            int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *val = *(int*)data1->value + *(int*)data2->value;
-            (yyval.ptr) = createData(val, INT_TYPE);
-        } else if (data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE) {
-            float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value + *(float*)data2->value;
-            (yyval.ptr) = createData(fval, FLOAT_TYPE);
-        } else {
-            yyerror("Type mismatch in addition");
-        }
+        (yyval.ptr) = getObjectAttribute((yyvsp[-2].sval), (yyvsp[0].sval));
     }
-#line 1222 "parser.tab.c"
-    break;
-
-  case 14: /* expression: expression '-' expression  */
-#line 110 "parser.y"
-                                {
-        Data* data1 = (Data*)(yyvsp[-2].ptr);
-        Data* data2 = (Data*)(yyvsp[0].ptr);
-
-        if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
-            int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *val = *(int*)data1->value - *(int*)data2->value;
-            (yyval.ptr) = createData(val, INT_TYPE);
-
-        } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
-             float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value - *(float*)data2->value;
-            (yyval.ptr) = createData(fval, FLOAT_TYPE);
-            
-        } else {
-            yyerror("Type mismatch in subtraction");
-        }
-    }
-#line 1253 "parser.tab.c"
-    break;
-
-  case 15: /* expression: expression '*' expression  */
-#line 136 "parser.y"
-                                {
-        Data* data1 = (Data*)(yyvsp[-2].ptr);
-        Data* data2 = (Data*)(yyvsp[0].ptr);
-
-        if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
-            int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *val = *(int*)data1->value * *(int*)data2->value;
-            (yyval.ptr) = createData(val, INT_TYPE);
-        } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
-            float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value * *(float*)data2->value;
-            (yyval.ptr) = createData(fval, FLOAT_TYPE);
-        } else {
-            yyerror("Type mismatch in multiplication");
-        }
-    }
-#line 1282 "parser.tab.c"
-    break;
-
-  case 16: /* expression: expression '/' expression  */
-#line 160 "parser.y"
-                                {
-        Data* data1 = (Data*)(yyvsp[-2].ptr);
-        Data* data2 = (Data*)(yyvsp[0].ptr);
-
-        if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
-            if (*(int*)data2->value == 0) {
-                yyerror("Division by zero error");
-            }
-            int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *val = *(int*)data1->value / *(int*)data2->value;
-            (yyval.ptr) = createData(val, INT_TYPE);
-        } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
-            if (*(float*)data2->value == 0.0f) {
-                yyerror("Division by zero error");
-            }
-            float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value / *(float*)data2->value;
-            (yyval.ptr) = createData(fval, FLOAT_TYPE);
-        } else {
-            yyerror("Type mismatch in division");
-        }
-    }
-#line 1317 "parser.tab.c"
+#line 1252 "parser.tab.c"
     break;
 
 
-#line 1321 "parser.tab.c"
+#line 1256 "parser.tab.c"
 
       default: break;
     }
@@ -1510,12 +1445,17 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 192 "parser.y"
+#line 112 "parser.y"
 
 
 void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+    extern char *yytext;   
+    extern int yylineno;
+    fprintf(stderr, "Syntax Error at line %d: %s. Unexpected token: '%s'\n", 
+            yylineno, s, yytext);
 }
+
+
 
 int main() {
     yyparse();

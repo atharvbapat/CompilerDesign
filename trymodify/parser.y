@@ -40,10 +40,10 @@ statement:
     | PRINT IDENTIFIER SEMICOLON {
         printSymbol($2);
     }
-    | PRINT SEMICOLON{
+    | PRINT SEMICOLON {
         printSymbolTable();
     }
-    | "del" IDENTIFIER SEMICOLON{
+    | "del" IDENTIFIER SEMICOLON {
         deleteSymbol($2);
     }
     ;
@@ -51,28 +51,16 @@ statement:
 expression:
     INT_VALUE {
         int* val = malloc(sizeof(int));
-        if (!val) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(1);
-        }
         *val = $1;
         $$ = createData(val, INT_TYPE);
     }
     | FLOAT_VALUE {
         float* val = malloc(sizeof(float));
-        if (!val) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(1);
-        }
         *val = $1;
         $$ = createData(val, FLOAT_TYPE);
     }
     | CHAR_VALUE {
         char* val = malloc(sizeof(char));
-        if (!val) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(1);
-        }
         *val = $1;
         $$ = createData(val, CHAR_TYPE);
     }
@@ -89,20 +77,12 @@ expression:
 
         if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
             int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
             *val = *(int*)data1->value + *(int*)data2->value;
             $$ = createData(val, INT_TYPE);
         } else if (data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE) {
-            float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value + *(float*)data2->value;
-            $$ = createData(fval, FLOAT_TYPE);
+            float* val = malloc(sizeof(float));
+            *val = *(float*)data1->value + *(float*)data2->value;
+            $$ = createData(val, FLOAT_TYPE);
         } else {
             yyerror("Type mismatch in addition");
         }
@@ -113,22 +93,12 @@ expression:
 
         if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
             int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
             *val = *(int*)data1->value - *(int*)data2->value;
             $$ = createData(val, INT_TYPE);
-
-        } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
-             float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value - *(float*)data2->value;
-            $$ = createData(fval, FLOAT_TYPE);
-
+        } else if (data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE) {
+            float* val = malloc(sizeof(float));
+            *val = *(float*)data1->value - *(float*)data2->value;
+            $$ = createData(val, FLOAT_TYPE);
         } else {
             yyerror("Type mismatch in subtraction");
         }
@@ -139,20 +109,12 @@ expression:
 
         if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
             int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
             *val = *(int*)data1->value * *(int*)data2->value;
             $$ = createData(val, INT_TYPE);
-        } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
-            float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value * *(float*)data2->value;
-            $$ = createData(fval, FLOAT_TYPE);
+        } else if (data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE) {
+            float* val = malloc(sizeof(float));
+            *val = *(float*)data1->value * *(float*)data2->value;
+            $$ = createData(val, FLOAT_TYPE);
         } else {
             yyerror("Type mismatch in multiplication");
         }
@@ -166,23 +128,15 @@ expression:
                 yyerror("Division by zero error");
             }
             int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
             *val = *(int*)data1->value / *(int*)data2->value;
             $$ = createData(val, INT_TYPE);
-        } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
+        } else if (data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE) {
             if (*(float*)data2->value == 0.0f) {
                 yyerror("Division by zero error");
             }
-            float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value / *(float*)data2->value;
-            $$ = createData(fval, FLOAT_TYPE);
+            float* val = malloc(sizeof(float));
+            *val = *(float*)data1->value / *(float*)data2->value;
+            $$ = createData(val, FLOAT_TYPE);
         } else {
             yyerror("Type mismatch in division");
         }
@@ -199,5 +153,3 @@ int main() {
     yyparse();
     return 0;
 }
-
-

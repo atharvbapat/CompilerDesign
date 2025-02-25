@@ -7,29 +7,28 @@
 
 typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
 
-typedef struct {
+typedef struct Data {
     DataType type;
     void* value;
     int ref_count;
+    char** names;   
+    int name_count; 
 } Data;
 
 typedef struct Symbol {
-    char name[50];  
-    Data* data;     
-    struct Symbol* next;  
+    struct Symbol* next;
+    Data* data;
 } Symbol;
-
 
 extern Symbol* symbolTable;
 
 void* createData(void* value, DataType type);
 void insertSymbol(char* name, Data* data);
 Data* getSymbolValue(char* name);
+void printSymbolTable();
 void printSymbol(char* name);
-void printSymbolTable();  
-void addRef(Data* data);
-void removeRef(Data* data);
+void addRef(Data* data, char* name);
+void removeRef(Data* data, char* name);
 void deleteSymbol(char* name);
 
 #endif // SYMBOL_TABLE_H
-

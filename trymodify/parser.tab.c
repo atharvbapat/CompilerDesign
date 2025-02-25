@@ -511,10 +511,10 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int8 yyrline[] =
 {
-       0,    32,    32,    33,    37,    40,    43,    46,    52,    61,
-      70,    79,    83,    86,   110,   136,   160
+       0,    32,    32,    33,    37,    40,    43,    46,    52,    57,
+      62,    67,    71,    74,    90,   106,   122
 };
 #endif
 
@@ -1119,7 +1119,7 @@ yyreduce:
 
   case 6: /* statement: PRINT SEMICOLON  */
 #line 43 "parser.y"
-                     {
+                      {
         printSymbolTable();
     }
 #line 1126 "parser.tab.c"
@@ -1127,7 +1127,7 @@ yyreduce:
 
   case 7: /* statement: "del" IDENTIFIER SEMICOLON  */
 #line 46 "parser.y"
-                                {
+                                 {
         deleteSymbol((yyvsp[-1].sval));
     }
 #line 1134 "parser.tab.c"
@@ -1137,152 +1137,114 @@ yyreduce:
 #line 52 "parser.y"
               {
         int* val = malloc(sizeof(int));
-        if (!val) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(1);
-        }
         *val = (yyvsp[0].ival);
         (yyval.ptr) = createData(val, INT_TYPE);
     }
-#line 1148 "parser.tab.c"
+#line 1144 "parser.tab.c"
     break;
 
   case 9: /* expression: FLOAT_VALUE  */
-#line 61 "parser.y"
+#line 57 "parser.y"
                   {
         float* val = malloc(sizeof(float));
-        if (!val) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(1);
-        }
         *val = (yyvsp[0].fval);
         (yyval.ptr) = createData(val, FLOAT_TYPE);
     }
-#line 1162 "parser.tab.c"
+#line 1154 "parser.tab.c"
     break;
 
   case 10: /* expression: CHAR_VALUE  */
-#line 70 "parser.y"
+#line 62 "parser.y"
                  {
         char* val = malloc(sizeof(char));
-        if (!val) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(1);
-        }
         *val = (yyvsp[0].cval);
         (yyval.ptr) = createData(val, CHAR_TYPE);
     }
-#line 1176 "parser.tab.c"
+#line 1164 "parser.tab.c"
     break;
 
   case 11: /* expression: STRING_VALUE  */
-#line 79 "parser.y"
+#line 67 "parser.y"
                    {
         char* val = strdup((yyvsp[0].sval));
         (yyval.ptr) = createData(val, STRING_TYPE);
     }
-#line 1185 "parser.tab.c"
+#line 1173 "parser.tab.c"
     break;
 
   case 12: /* expression: IDENTIFIER  */
-#line 83 "parser.y"
+#line 71 "parser.y"
                  {
         (yyval.ptr) = getSymbolValue((yyvsp[0].sval));
     }
-#line 1193 "parser.tab.c"
+#line 1181 "parser.tab.c"
     break;
 
   case 13: /* expression: expression '+' expression  */
-#line 86 "parser.y"
+#line 74 "parser.y"
                                 {
         Data* data1 = (Data*)(yyvsp[-2].ptr);
         Data* data2 = (Data*)(yyvsp[0].ptr);
 
         if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
             int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
             *val = *(int*)data1->value + *(int*)data2->value;
             (yyval.ptr) = createData(val, INT_TYPE);
         } else if (data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE) {
-            float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value + *(float*)data2->value;
-            (yyval.ptr) = createData(fval, FLOAT_TYPE);
+            float* val = malloc(sizeof(float));
+            *val = *(float*)data1->value + *(float*)data2->value;
+            (yyval.ptr) = createData(val, FLOAT_TYPE);
         } else {
             yyerror("Type mismatch in addition");
         }
     }
-#line 1222 "parser.tab.c"
+#line 1202 "parser.tab.c"
     break;
 
   case 14: /* expression: expression '-' expression  */
-#line 110 "parser.y"
+#line 90 "parser.y"
                                 {
         Data* data1 = (Data*)(yyvsp[-2].ptr);
         Data* data2 = (Data*)(yyvsp[0].ptr);
 
         if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
             int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
             *val = *(int*)data1->value - *(int*)data2->value;
             (yyval.ptr) = createData(val, INT_TYPE);
-
-        } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
-             float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value - *(float*)data2->value;
-            (yyval.ptr) = createData(fval, FLOAT_TYPE);
-            
+        } else if (data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE) {
+            float* val = malloc(sizeof(float));
+            *val = *(float*)data1->value - *(float*)data2->value;
+            (yyval.ptr) = createData(val, FLOAT_TYPE);
         } else {
             yyerror("Type mismatch in subtraction");
         }
     }
-#line 1253 "parser.tab.c"
+#line 1223 "parser.tab.c"
     break;
 
   case 15: /* expression: expression '*' expression  */
-#line 136 "parser.y"
+#line 106 "parser.y"
                                 {
         Data* data1 = (Data*)(yyvsp[-2].ptr);
         Data* data2 = (Data*)(yyvsp[0].ptr);
 
         if (data1->type == INT_TYPE && data2->type == INT_TYPE) {
             int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
             *val = *(int*)data1->value * *(int*)data2->value;
             (yyval.ptr) = createData(val, INT_TYPE);
-        } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
-            float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value * *(float*)data2->value;
-            (yyval.ptr) = createData(fval, FLOAT_TYPE);
+        } else if (data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE) {
+            float* val = malloc(sizeof(float));
+            *val = *(float*)data1->value * *(float*)data2->value;
+            (yyval.ptr) = createData(val, FLOAT_TYPE);
         } else {
             yyerror("Type mismatch in multiplication");
         }
     }
-#line 1282 "parser.tab.c"
+#line 1244 "parser.tab.c"
     break;
 
   case 16: /* expression: expression '/' expression  */
-#line 160 "parser.y"
+#line 122 "parser.y"
                                 {
         Data* data1 = (Data*)(yyvsp[-2].ptr);
         Data* data2 = (Data*)(yyvsp[0].ptr);
@@ -1292,32 +1254,24 @@ yyreduce:
                 yyerror("Division by zero error");
             }
             int* val = malloc(sizeof(int));
-            if (!val) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
             *val = *(int*)data1->value / *(int*)data2->value;
             (yyval.ptr) = createData(val, INT_TYPE);
-        } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
+        } else if (data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE) {
             if (*(float*)data2->value == 0.0f) {
                 yyerror("Division by zero error");
             }
-            float* fval = malloc(sizeof(float));
-            if (!fval) {
-                fprintf(stderr, "Memory allocation failed\n");
-                exit(1);
-            }
-            *fval = *(float*)data1->value / *(float*)data2->value;
-            (yyval.ptr) = createData(fval, FLOAT_TYPE);
+            float* val = malloc(sizeof(float));
+            *val = *(float*)data1->value / *(float*)data2->value;
+            (yyval.ptr) = createData(val, FLOAT_TYPE);
         } else {
             yyerror("Type mismatch in division");
         }
     }
-#line 1317 "parser.tab.c"
+#line 1271 "parser.tab.c"
     break;
 
 
-#line 1321 "parser.tab.c"
+#line 1275 "parser.tab.c"
 
       default: break;
     }
@@ -1510,7 +1464,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 192 "parser.y"
+#line 146 "parser.y"
 
 
 void yyerror(const char *s) {

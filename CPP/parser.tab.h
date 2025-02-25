@@ -57,13 +57,16 @@ extern int yydebug;
     PRINT = 258,                   /* PRINT  */
     ASSIGN = 259,                  /* ASSIGN  */
     SEMICOLON = 260,               /* SEMICOLON  */
-    EOL = 261,                     /* EOL  */
-    INT_VALUE = 262,               /* INT_VALUE  */
-    FLOAT_VALUE = 263,             /* FLOAT_VALUE  */
-    CHAR_VALUE = 264,              /* CHAR_VALUE  */
-    STRING_VALUE = 265,            /* STRING_VALUE  */
-    IDENTIFIER = 266,              /* IDENTIFIER  */
-    DELETE = 267                   /* DELETE  */
+    COLON = 261,                   /* COLON  */
+    COMMA = 262,                   /* COMMA  */
+    EOL = 263,                     /* EOL  */
+    CLASS = 264,                   /* CLASS  */
+    INT_VALUE = 265,               /* INT_VALUE  */
+    FLOAT_VALUE = 266,             /* FLOAT_VALUE  */
+    CHAR_VALUE = 267,              /* CHAR_VALUE  */
+    STRING_VALUE = 268,            /* STRING_VALUE  */
+    IDENTIFIER = 269,              /* IDENTIFIER  */
+    DELETE = 270                   /* DELETE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -72,15 +75,16 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 11 "parser.y"
+#line 13 "parser.y"
 
     int ival;
     float fval;
     char cval;
     char *sval;
     void *ptr;  
+    struct Data** dt;
 
-#line 84 "parser.tab.h"
+#line 88 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

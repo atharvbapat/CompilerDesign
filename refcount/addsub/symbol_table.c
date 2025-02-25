@@ -6,17 +6,49 @@
 Symbol* symbolTable = NULL;
 
 void* createData(void* value, DataType type) {
+    Symbol* sym = symbolTable;
+
+    while (sym) {
+        if (sym->data->type == type) {
+            if ((type == INT_TYPE && *((int*)sym->data->value) == *((int*)value)) ||
+                (type == FLOAT_TYPE && *((float*)sym->data->value) == *((float*)value)) ||
+                (type == STRING_TYPE && strcmp((char*)sym->data->value, (char*)value) == 0)) {
+                addRef(sym->data);
+                return sym->data;
+            }
+        }
+        sym = sym->next;
+    }
+
     Data* data = malloc(sizeof(Data));
     data->type = type;
     data->value = value;
-    data->ref_count = 1;
+    data->ref_count = 0;
+
     return data;
 }
 
+
 void insertSymbol(char* name, Data* data) {
-    Symbol* sym = malloc(sizeof(Symbol));
+    Symbol* sym = symbolTable;
+    Symbol* prev = NULL;
+
+    while (sym) {
+        if (strcmp(sym->name, name) == 0) {  
+            removeRef(sym->data); 
+            sym->data = data; 
+            // removeRef(sym->data);  
+            addRef(data);       
+            return;
+        }
+        prev = sym;
+        sym = sym->next;
+    }
+
+    sym = malloc(sizeof(Symbol));
     strcpy(sym->name, name);
     sym->data = data;
+    addRef(data);  
     sym->next = symbolTable;
     symbolTable = sym;
 }
@@ -52,19 +84,65 @@ void addRef(Data* data){
     }
 }
 
-
+void removeRef(Data* data){
+    if(data){
+        data->ref_count--;
+        if(data->ref_count == 0){
+            free(data->value);
+            free(data);
+        }
+    }
+}
 void printSymbolTable() {
-    printf("\n--- Symbol Table ---\n");
+    printf("\n--------------------------------------------\n");
+    printf("| %-15s | %-10s | %-10s |\n", "Variable", "Value", "Ref Count");
+    printf("--------------------------------------------\n");
+
     Symbol* sym = symbolTable;
     while (sym) {
-        printf("%s = ", sym->name);
+        printf("| %-15s | ", sym->name);
+
+
         switch (sym->data->type) {
-            case INT_TYPE: printf("%d\n", *(int*)sym->data->value); break;
-            case FLOAT_TYPE: printf("%f\n", *(float*)sym->data->value); break;
-            case CHAR_TYPE: printf("'%c'\n", *(char*)sym->data->value); break;
-            case STRING_TYPE: printf("\"%s\"\n", (char*)sym->data->value); break;
+            case INT_TYPE:
+                printf("%-10d | ", *(int*)sym->data->value);
+                break;
+            case FLOAT_TYPE:
+                printf("%-10.2f | ", *(float*)sym->data->value);
+                break;
+            case CHAR_TYPE:
+                printf("'%-8c' | ", *(char*)sym->data->value);
+                break;
+            case STRING_TYPE:
+                printf("\"%-8s\" | ", (char*)sym->data->value);
+                break;
         }
+
+        printf("%-10d |\n", sym->data->ref_count);
+
         sym = sym->next;
     }
-    printf("--------------------\n");
+
+    printf("--------------------------------------------\n");
+}
+
+
+void deleteSymbol(char* name) {
+    Symbol* sym = symbolTable;
+    Symbol* prev = NULL;
+
+    while (sym) {
+        if (strcmp(sym->name, name) == 0) {
+            if (prev) {
+                prev->next = sym->next;
+            } else {
+                symbolTable = sym->next;
+            }
+            removeRef(sym->data);  
+            free(sym);
+            return;
+        }
+        prev = sym;
+        sym = sym->next;
+    }
 }
