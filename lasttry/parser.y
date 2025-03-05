@@ -6,7 +6,7 @@
 
     extern int yylex();
     void yyerror(const char *s);
-
+     AttrNode* attrList = NULL;
 
 %}
 
@@ -58,7 +58,11 @@ statement:
 
 
 class_definition:
-    CLS_DEC attribute_list { addAttribute($1, $2); }
+    CLS_DEC attribute_list {
+        pushAttrListToClass($1, attrList);
+        freeAttrList(attrList);             
+        attrList = NULL;
+    }
     ;
 
 CLS_DEC:
@@ -70,10 +74,10 @@ CLS_DEC:
 
 attribute_list:
     IDENTIFIER {
-        $$ = strdup($1); 
+        attrList = createAttrList($1);  
     }
     | attribute_list COMMA IDENTIFIER {
-        $$ = strdup($3); 
+        addToAttrList(&attrList, $3);  
     }
     ;
 

@@ -27,7 +27,7 @@
 %token <sval> STRING_VALUE IDENTIFIER
 %token DELETE
 %type <ptr> expression
-%type <sval> attribute_list
+%type <dt> attribute_list
 %type <sval> CLS_DEC
 %left '+' '-' 
 %left '*' '/'
@@ -58,22 +58,22 @@ statement:
 
 
 class_definition:
-    CLS_DEC attribute_list { addAttribute($1, $2); }
+    CLS_DEC attribute_list  { createAttributes($1, $2); } 
     ;
 
 CLS_DEC:
     CLASS IDENTIFIER COLON {
         createClass($2);
-        $$ = strdup($2);  
+        $$ = $2;  /* Store the class name */
     }
     ;
 
 attribute_list:
     IDENTIFIER {
-        $$ = strdup($1); 
+        addAttribute($$, $1); 
     }
     | attribute_list COMMA IDENTIFIER {
-        $$ = strdup($3); 
+        addAttribute($$, $3);
     }
     ;
 
@@ -195,7 +195,4 @@ int main(){
     yyparse();
     return 0;
 }
-
-
-
 

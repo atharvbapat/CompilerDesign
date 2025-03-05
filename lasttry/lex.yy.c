@@ -787,89 +787,89 @@ YY_RULE_SETUP
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 19 "t.l"
+#line 20 "t.l"
 { return EOL; }  
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 20 "t.l"
+#line 21 "t.l"
 { return PRINT; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 21 "t.l"
+#line 22 "t.l"
 { return CLASS; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 22 "t.l"
+#line 23 "t.l"
 { yylval.fval = atof(yytext); return FLOAT_VALUE; }  
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 23 "t.l"
+#line 24 "t.l"
 { yylval.ival = atoi(yytext); return INT_VALUE; }
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 24 "t.l"
+#line 25 "t.l"
 { yylval.cval = yytext[1]; return CHAR_VALUE; }  
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 25 "t.l"
+#line 26 "t.l"
 { yylval.sval = strdup(yytext + 1); yylval.sval[strlen(yylval.sval) - 1] = '\0'; return STRING_VALUE; }  
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 26 "t.l"
+#line 27 "t.l"
 { yylval.sval = strdup(yytext); return IDENTIFIER; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 27 "t.l"
+#line 28 "t.l"
 { return ASSIGN; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 28 "t.l"
+#line 29 "t.l"
 { return SEMICOLON; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 29 "t.l"
+#line 30 "t.l"
 {return COLON; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 30 "t.l"
+#line 31 "t.l"
 { return COMMA;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 31 "t.l"
+#line 32 "t.l"
 { return '('; }  
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 32 "t.l"
+#line 33 "t.l"
 { return ')'; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 33 "t.l"
+#line 34 "t.l"
 {return '^'; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 34 "t.l"
+#line 35 "t.l"
 { printf("Unknown token: %s\n", yytext); return yytext[0]; }  
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 35 "t.l"
+#line 36 "t.l"
 ECHO;
 	YY_BREAK
 #line 876 "lex.yy.c"
@@ -1877,7 +1877,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 35 "t.l"
+#line 36 "t.l"
 
 
 

@@ -79,6 +79,50 @@ void printSymbol(char* name){
     }
 }
 
+AttrNode* createAttrList(char* attrName) {
+    AttrNode* head = (AttrNode*)malloc(sizeof(AttrNode));
+    head->name = strdup(attrName);
+    head->next = NULL;
+    return head;
+}
+
+void addToAttrList(AttrNode** head, char* attrName) {
+    AttrNode* newNode = (AttrNode*)malloc(sizeof(AttrNode));
+    newNode->name = strdup(attrName);
+    newNode->next = NULL;
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    AttrNode* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+void pushAttrListToClass(char* className, AttrNode* head) {
+    AttrNode* temp = head;
+    
+    while (temp != NULL) {
+        addAttribute(className, temp->name);
+        temp = temp->next;
+    }
+
+}
+
+void freeAttrList(AttrNode* head) {
+    AttrNode* temp;
+    while (head) {
+        temp = head;
+        head = head->next;
+        free(temp->name);
+        free(temp);
+    }
+}
+
 
 
 void printSymbolTable() {

@@ -70,10 +70,10 @@ CLS_DEC:
 
 attribute_list:
     IDENTIFIER {
-        addAttribute($$, $1); /* Use $$ to store the class name */
+        addAttribute($$, $1); 
     }
     | attribute_list COMMA IDENTIFIER {
-        addAttribute($$, $3); /* Continue adding attributes */
+        addAttribute($$, $3);
     }
     ;
 

@@ -1,4 +1,3 @@
-
 #include "symbol_table.h"
 
 Symbol* symbolTable = NULL;
@@ -66,17 +65,6 @@ Data* getSymbolValue(char* name) {
     }
     printf("Undefined variable: %s\n", name);
     return NULL;
-}
-
-void printSymbol(char* name){
-    Symbol* sym = symbolTable;
-    while (sym) {
-        if (strcmp(sym->data->name, name) == 0) {
-            printf("%s: %s\n", sym->data->name, sym->data->value);
-            break;
-        }
-        sym = sym->next;
-    }
 }
 
 
@@ -328,43 +316,43 @@ void setAttributeValue(char* objectName, char* attrName, Data* d) {
 }
 
 
-// int main() {
-//     int val = 10;
-//     float fval = 20.5;
-//     char cval = 'i';
-//     char* sval = "Hello";
+int main() {
+    int val = 10;
+    float fval = 20.5;
+    char cval = 'i';
+    char* sval = "Hello";
 
-//     Data* intData = createData(&val, INT_TYPE);
-//     insertSymbol("integer", intData);
+    Data* intData = createData(&val, INT_TYPE);
+    insertSymbol("integer", intData);
 
-//     Data* floatData = createData(&fval, FLOAT_TYPE);
-//     insertSymbol("float_var", floatData);
+    Data* floatData = createData(&fval, FLOAT_TYPE);
+    insertSymbol("float_var", floatData);
 
-//     Data* charData = createData(&cval,CHAR_TYPE);
-//     insertSymbol("char_var", charData);
+    Data* charData = createData(&cval,CHAR_TYPE);
+    insertSymbol("char_var", charData);
 
-//     Data* stringData = createData(sval,STRING_TYPE);
-//     insertSymbol("string_var", stringData);
-
-
-//     Data* class = createClass("MYCLASS");
-//     createAttributes("MYCLASS","a");
-//     addAttribute("MYCLASS","b");
-
-//     createObject("MYCLASS","op");
-
-//     Data* class1 = createClass("MYCLASS1");
-//     createAttributes("MYCLASS1","a1");
-//     addAttribute("MYCLASS1","b1");
-
-//     createObject("MYCLASS1","op1");
+    Data* stringData = createData(sval,STRING_TYPE);
+    insertSymbol("string_var", stringData);
 
 
-//     Data* newdata = createData(&cval,CHAR_TYPE);
-//     setAttributeValue("op","a",newdata);
+    Data* class = createClass("MYCLASS");
+    createAttributes("MYCLASS","a");
+    addAttribute("MYCLASS","b");
+
+    createObject("MYCLASS","op");
+
+    Data* class1 = createClass("MYCLASS1");
+    createAttributes("MYCLASS1","a1");
+    addAttribute("MYCLASS1","b1");
+
+    createObject("MYCLASS1","op1");
+
+
+    Data* newdata = createData(&cval,CHAR_TYPE);
+    setAttributeValue("op","a",newdata);
 
 
 
-//     printSymbolTable();
-//     return 0;
-// } 
+    printSymbolTable();
+    return 0;
+} 

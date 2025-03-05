@@ -76,7 +76,7 @@
 
     extern int yylex();
     void yyerror(const char *s);
-
+     AttrNode* attrList = NULL;
 
 
 #line 83 "parser.tab.c"
@@ -526,8 +526,8 @@ static const yytype_int8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    38,    38,    39,    43,    44,    45,    48,    51,    54,
-      61,    65,    72,    75,    83,    90,    95,   100,   105,   109,
-     112,   127,   143,   159
+      61,    69,    76,    79,    87,    94,    99,   104,   109,   113,
+     116,   131,   147,   163
 };
 #endif
 
@@ -1159,92 +1159,96 @@ yyreduce:
 
   case 10: /* class_definition: CLS_DEC attribute_list  */
 #line 61 "parser.y"
-                           { addAttribute((yyvsp[-1].sval), (yyvsp[0].sval)); }
-#line 1164 "parser.tab.c"
+                           {
+        pushAttrListToClass((yyvsp[-1].sval), attrList);
+        freeAttrList(attrList);             
+        attrList = NULL;
+    }
+#line 1168 "parser.tab.c"
     break;
 
   case 11: /* CLS_DEC: CLASS IDENTIFIER COLON  */
-#line 65 "parser.y"
+#line 69 "parser.y"
                            {
         createClass((yyvsp[-1].sval));
         (yyval.sval) = strdup((yyvsp[-1].sval));  
     }
-#line 1173 "parser.tab.c"
+#line 1177 "parser.tab.c"
     break;
 
   case 12: /* attribute_list: IDENTIFIER  */
-#line 72 "parser.y"
+#line 76 "parser.y"
                {
-        (yyval.sval) = strdup((yyvsp[0].sval)); 
+        attrList = createAttrList((yyvsp[0].sval));  
     }
-#line 1181 "parser.tab.c"
+#line 1185 "parser.tab.c"
     break;
 
   case 13: /* attribute_list: attribute_list COMMA IDENTIFIER  */
-#line 75 "parser.y"
+#line 79 "parser.y"
                                       {
-        (yyval.sval) = (yyvsp[-2].sval); 
+        addToAttrList(&attrList, (yyvsp[0].sval));  
     }
-#line 1189 "parser.tab.c"
+#line 1193 "parser.tab.c"
     break;
 
   case 14: /* object_instantiation: IDENTIFIER ASSIGN IDENTIFIER '(' ')' SEMICOLON  */
-#line 83 "parser.y"
+#line 87 "parser.y"
                                                    {
         createObject((yyvsp[-3].sval),(yyvsp[-5].sval));
     }
-#line 1197 "parser.tab.c"
+#line 1201 "parser.tab.c"
     break;
 
   case 15: /* expression: INT_VALUE  */
-#line 90 "parser.y"
+#line 94 "parser.y"
               {
         int* val = malloc(sizeof(int));
         *val = (yyvsp[0].ival);
         (yyval.ptr) = createData(val, INT_TYPE);
     }
-#line 1207 "parser.tab.c"
+#line 1211 "parser.tab.c"
     break;
 
   case 16: /* expression: FLOAT_VALUE  */
-#line 95 "parser.y"
+#line 99 "parser.y"
                   {
         float* val = malloc(sizeof(float));
         *val = (yyvsp[0].fval);
         (yyval.ptr) = createData(val, FLOAT_TYPE);
     }
-#line 1217 "parser.tab.c"
+#line 1221 "parser.tab.c"
     break;
 
   case 17: /* expression: CHAR_VALUE  */
-#line 100 "parser.y"
+#line 104 "parser.y"
                  {
         char* val = malloc(sizeof(char));
         *val = (yyvsp[0].cval);
         (yyval.ptr) = createData(val, CHAR_TYPE);
     }
-#line 1227 "parser.tab.c"
+#line 1231 "parser.tab.c"
     break;
 
   case 18: /* expression: STRING_VALUE  */
-#line 105 "parser.y"
+#line 109 "parser.y"
                    {
         char* val = strdup((yyvsp[0].sval));
         (yyval.ptr) = createData(val, STRING_TYPE);
     }
-#line 1236 "parser.tab.c"
+#line 1240 "parser.tab.c"
     break;
 
   case 19: /* expression: IDENTIFIER  */
-#line 109 "parser.y"
+#line 113 "parser.y"
                  {
         (yyval.ptr) = getSymbolValue((yyvsp[0].sval));
     }
-#line 1244 "parser.tab.c"
+#line 1248 "parser.tab.c"
     break;
 
   case 20: /* expression: expression '+' expression  */
-#line 112 "parser.y"
+#line 116 "parser.y"
                                 {
         Data* data1 = (Data*)(yyvsp[-2].ptr);
         Data* data2 = (Data*)(yyvsp[0].ptr);
@@ -1260,11 +1264,11 @@ yyreduce:
             yyerror("Type mismatch in addition");
         }
     }
-#line 1264 "parser.tab.c"
+#line 1268 "parser.tab.c"
     break;
 
   case 21: /* expression: expression '-' expression  */
-#line 127 "parser.y"
+#line 131 "parser.y"
                                 {
         Data* data1 = (Data*)(yyvsp[-2].ptr);
         Data* data2 = (Data*)(yyvsp[0].ptr);
@@ -1281,11 +1285,11 @@ yyreduce:
             yyerror("Type mismatch in subtraction");
         }
     }
-#line 1285 "parser.tab.c"
+#line 1289 "parser.tab.c"
     break;
 
   case 22: /* expression: expression '*' expression  */
-#line 143 "parser.y"
+#line 147 "parser.y"
                                 {
         Data* data1 = (Data*)(yyvsp[-2].ptr);
         Data* data2 = (Data*)(yyvsp[0].ptr);
@@ -1302,11 +1306,11 @@ yyreduce:
             yyerror("Type mismatch in multiplication");
         }
     }
-#line 1306 "parser.tab.c"
+#line 1310 "parser.tab.c"
     break;
 
   case 23: /* expression: expression '/' expression  */
-#line 159 "parser.y"
+#line 163 "parser.y"
                                 {
         Data* data1 = (Data*)(yyvsp[-2].ptr);
         Data* data2 = (Data*)(yyvsp[0].ptr);
@@ -1329,11 +1333,11 @@ yyreduce:
             yyerror("Type mismatch in division");
         }
     }
-#line 1333 "parser.tab.c"
+#line 1337 "parser.tab.c"
     break;
 
 
-#line 1337 "parser.tab.c"
+#line 1341 "parser.tab.c"
 
       default: break;
     }
@@ -1526,7 +1530,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 184 "parser.y"
+#line 188 "parser.y"
 
 
 void yyerror(const char *s) {
@@ -1541,4 +1545,7 @@ int main(){
     yyparse();
     return 0;
 }
+
+
+
 
