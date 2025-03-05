@@ -20,10 +20,16 @@ typedef struct Symbol {
 
 extern Symbol* symbolTable;
 
-void* createData(void* value, DataType type);
-void insertSymbol(char* name, Data* data);
-Data* getSymbolValue(char* name);
-void printSymbol(char* name);
-void printSymbolTable();  
+void insertSymbol(char *name, void *value);
+void setAttributeValue(char *object, char *attribute, void *value);
+void printSymbol(char *name);
+void printSymbolTable();
+void createAttributes(char *className, struct Data** attributes);
+void createClass(char *className);
+struct Data** createAttributeList(char *attribute);
+struct Data** addAttribute(struct Data** list, char *attribute);
+void createObject(char *className, char *objectName);
+void* createData(void *value, int type);
+void* getSymbolValue(char *name);
 
 #endif // SYMBOL_TABLE_H

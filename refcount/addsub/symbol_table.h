@@ -19,6 +19,7 @@ typedef struct Symbol {
     struct Symbol* next;  
 } Symbol;
 
+
 extern Symbol* symbolTable;
 
 void* createData(void* value, DataType type);
@@ -26,5 +27,9 @@ void insertSymbol(char* name, Data* data);
 Data* getSymbolValue(char* name);
 void printSymbol(char* name);
 void printSymbolTable();  
+void addRef(Data* data);
+void removeRef(Data* data);
+void deleteSymbol(char* name);
 
 #endif // SYMBOL_TABLE_H
+

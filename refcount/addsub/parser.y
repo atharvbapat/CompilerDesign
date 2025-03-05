@@ -21,6 +21,7 @@
 %token <fval> FLOAT_VALUE
 %token <cval> CHAR_VALUE
 %token <sval> STRING_VALUE IDENTIFIER
+%token DELETE;
 %type <ptr> expression
 %left '+' '-' 
 %left '*' '/'
@@ -41,6 +42,9 @@ statement:
     }
     | PRINT SEMICOLON{
         printSymbolTable();
+    }
+    | "del" IDENTIFIER SEMICOLON{
+        deleteSymbol($2);
     }
     ;
 
@@ -115,6 +119,7 @@ expression:
             }
             *val = *(int*)data1->value - *(int*)data2->value;
             $$ = createData(val, INT_TYPE);
+
         } else if(data1->type == FLOAT_TYPE && data2->type == FLOAT_TYPE){
              float* fval = malloc(sizeof(float));
             if (!fval) {
@@ -123,6 +128,7 @@ expression:
             }
             *fval = *(float*)data1->value - *(float*)data2->value;
             $$ = createData(fval, FLOAT_TYPE);
+
         } else {
             yyerror("Type mismatch in subtraction");
         }
@@ -193,3 +199,5 @@ int main() {
     yyparse();
     return 0;
 }
+
+
